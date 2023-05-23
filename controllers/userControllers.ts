@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { User } from "../models/userModel";
 import { generateToken } from "../config/generateToken";
 import { compareSync } from "bcrypt";
+import { CustomRequest } from "../middlewares/requireAuth";
 
 export const register = async (req: Request, res: Response) => {
   const { name, email, password, picture } = req.body;
@@ -56,4 +57,17 @@ export const login = async (req: Request, res: Response) => {
     res.status(401);
     throw new Error("Invalid Credentials");
   }
+};
+
+export const getAllUsers = async (req: Request, res: Response) => {
+  // req.user have only id (i.e loggedInUser's _id)
+  const users = await User.find({
+    $or: [
+      { name: { $regex: req.query.search, $options: "i" } },
+      { name: { $regex: req.query.search, $options: "i" } },
+    ],
+  }).find({ _id: { $ne: (req as CustomRequest).user.id } });
+
+  // So returning users expect loggedInUser
+  res.status(200).send(users);
 };

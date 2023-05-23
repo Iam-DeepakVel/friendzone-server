@@ -5,6 +5,7 @@ import cors from "cors";
 import { connectDB } from "./config/db";
 import { userRoutes } from "./routes/userRoutes";
 import { errorHandler, notFound } from "./middlewares/errorHandler";
+import { chatRoutes } from "./routes/chatRoutes";
 
 export class AppModule {
   constructor(public app: Application) {
@@ -16,6 +17,7 @@ export class AppModule {
     app.use(express.json());
 
     app.use("/api/v1/user", userRoutes);
+    app.use("/api/v1/chat", chatRoutes);
 
     app.use(notFound);
     app.use(errorHandler);
