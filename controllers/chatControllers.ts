@@ -28,9 +28,9 @@ export const accessChat = async (req: Request, res: Response) => {
   // Checks whether chat already exists
   if (isChat.length > 0) {
     // return the chat if it already exists
-    res.send(isChat[0]);
+    return res.send(isChat[0]);
   } else {
-    // create one if it doesn't exists already
+    // create one if chat doesn't exists already
     try {
       const chatData = {
         chatName: "sender",
@@ -42,9 +42,9 @@ export const accessChat = async (req: Request, res: Response) => {
         "users",
         "-password"
       );
-      res.send(200).json(fullChat);
+      return res.status(200).json(fullChat);
     } catch (error: any) {
-      res.status(400);
+      res.sendStatus(400);
       throw new Error(error.message);
     }
   }
@@ -68,7 +68,7 @@ export const fetchChats = async (req: Request, res: Response) => {
 
     res.status(200).json(chats);
   } catch (error: any) {
-    res.status(400);
+    res.sendStatus(400);
     throw new Error(error.message);
   }
 };
@@ -104,7 +104,7 @@ export const createGroupChat = async (req: Request, res: Response) => {
 
     res.status(200).json(fullGroupChat);
   } catch (error: any) {
-    res.status(400);
+    res.sendStatus(400);
     throw new Error(error.message);
   }
 };
@@ -121,7 +121,7 @@ export const renameGroup = async (req: Request, res: Response) => {
     .populate("groupAdmin", "-password");
 
   if (!updatedChat) {
-    res.status(404);
+    res.sendStatus(404);
     throw new Error("Chat Not Found");
   } else {
     res.status(200).json(updatedChat);
@@ -143,7 +143,7 @@ export const addToGroup = async (req: Request, res: Response) => {
     .populate("groupAdmin", "-password");
 
   if (!updatedChatWithUserAdded) {
-    res.status(404);
+    res.sendStatus(404);
     throw new Error("Chat Not Found");
   } else {
     res.status(200).json(updatedChatWithUserAdded);
@@ -165,7 +165,7 @@ export const removeFromGroup = async (req: Request, res: Response) => {
     .populate("groupAdmin", "-password");
 
   if (!updatedChatWithUserRemoved) {
-    res.status(404);
+    res.sendStatus(404);
     throw new Error("Chat Not Found");
   } else {
     res.status(200).json(updatedChatWithUserRemoved);
