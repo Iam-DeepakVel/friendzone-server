@@ -6,6 +6,7 @@ import { connectDB } from "./config/db";
 import { userRoutes } from "./routes/userRoutes";
 import { errorHandler, notFound } from "./middlewares/errorHandler";
 import { chatRoutes } from "./routes/chatRoutes";
+import { messageRoutes } from "./routes/messageRoutes";
 
 export class AppModule {
   constructor(public app: Application) {
@@ -18,6 +19,7 @@ export class AppModule {
 
     app.use("/api/v1/user", userRoutes);
     app.use("/api/v1/chat", chatRoutes);
+    app.use("/api/v1/message", messageRoutes);
 
     app.use(notFound);
     app.use(errorHandler);
